@@ -37,7 +37,7 @@ $ hexo init <folder>
 $ cd <folder>
 $ npm install
 ```
- 
+  
 其中<folder>中folder用你给你博客文件夹取的名字替换。
 
 完成后显示如下信息：
