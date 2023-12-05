@@ -17,4 +17,4 @@ comment: true
 # Git的安装
 
 在运行exe文件后出现以下页面
-![Git](../img/Git3.png)
+![Git](../img/Git3.png) 
