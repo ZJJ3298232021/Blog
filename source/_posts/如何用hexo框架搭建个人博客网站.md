@@ -47,7 +47,7 @@ $ npm install
 新建文件夹完成后目录文件如下：
 
 ```
-.
+. 
 ├── _config.yml
 ├── package.json
 ├── scaffolds
