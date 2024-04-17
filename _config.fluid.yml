@@ -788,7 +788,7 @@ valine:
   appId: 'PK1sOM3zuBVphRJyv17q0ZLU-gzGzoHsz'
   appKey: '6EJ0ojZYz60gOBxUSE6WJdNa'
   path: window.location.pathname
-  placeholder:
+  placeholder: '发布你的见解'
   avatar: 'retro'
   meta: ['nick', 'mail', 'link']
   requiredFields: []
@@ -799,7 +799,7 @@ valine:
   serverURLs: ''
   emojiCDN:
   emojiMaps:
-  enableQQ: false
+  enableQQ: true
 
 # Waline
 # 从 Valine 衍生而来，额外增加了服务端和多种功能
