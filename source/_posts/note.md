@@ -2,7 +2,7 @@
 title: 部署SpringBoot+Vue的网站
 tags: [笔记]
 category: 运维
-index_img: /img/Git_index.jpg
+index_img: /img/image-20241025171332270-1729847616964-1.png
 comment: true
 ---
 
