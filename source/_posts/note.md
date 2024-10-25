@@ -1,6 +1,5 @@
 ---
-title: Git的安装（待完成）
-date: 2023-10-29 11:00:08
+title: 部署SpringBoot+Vue的网站
 tags: [笔记]
 category: 运维
 index_img: /img/Git_index.jpg
