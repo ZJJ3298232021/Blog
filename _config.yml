@@ -13,7 +13,7 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://www.zankblog.asia
+url: https://blog.webzank.site
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -139,3 +139,5 @@ hexo_submit_urls_to_search_engine:
   google_host: https://yoursite.com/
   # 存放 google key 的 json 文件，放于网站根目录
   google_key_file: google_key.json
+sitemap:
+  path: sitemap.xml
