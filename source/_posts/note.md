@@ -74,7 +74,7 @@ env ALIBABA_CLOUD_ACCESS_KEY_ID=id ALIBABA_CLOUD_ACCESS_KEY_SECRET=secret /www/s
 
 完成后点击确定后运行即可。
 
-## 部署前端
+## 部署前端-1
 
 首先将node项目通过宝塔面板的`文件`传到`/www/wwwroot/`下（千万不要带着node module一起传），然后点击`网站->node项目->添加node项目`。
 
@@ -83,6 +83,35 @@ env ALIBABA_CLOUD_ACCESS_KEY_ID=id ALIBABA_CLOUD_ACCESS_KEY_SECRET=secret /www/s
 这里有个坑会在**遇到的问题**中讲。
 
 如果部署失败可以在宝塔面板的`终端`选项进入前端目录执行命令。
+
+## 部署前端-2
+
+部署前端还可以通过`nginx`来实现，这里给出其步骤：
+
+1. 生成`dist`生产文件，因为`nginx`不能直接部署`vue`项目，所以需要通过指令
+
+```bash
+npm run build
+```
+
+生成`dist`文件夹，完成后宝塔面板点击**网站**->**HTML项目**
+
+![image-20241216232258541](../img/image-20241216232258541.png)
+
+这里必须填写域名，你可以填写自己的域名，然后根目录选择刚刚生成的`dish`文件夹，点击创建即可，然后点击刚刚创建好的项目的**设置**->**配置文件**，设置好反向代理。
+
+```nginx
+# 后端API代理
+    location /api/ {
+        proxy_pass http://localhost:8080/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+```
+
+在服务器安全组中设置好端口放行应该就能访问(这里指的是通过IP访问)。
 
 ## 部署数据库
 
@@ -186,8 +215,30 @@ export default defineConfig({
 
 ![image-20241025194349851](../img/image-20241025194349851.png)
 
+## 域名绑定与`SSL`证书申请
+
+首先先在域名解析面板添加解析记录，这里以腾讯云为例
+
+![image-20241216233203074](../img/image-20241216233203074.png)
+
+点击新手快速解析
+
+![image-20241216233241151](../img/image-20241216233241151.png)
+
+这里输入服务器`IP`后点击确定即可。
+
+但是这时候可能还不能访问，那就需要申请SSL证书，宝塔点击**SSL**->**证书申请**->**Let's Encrypt**
+
+![image-20241216233528174](../img/image-20241216233528174.png)
+
+选择要添加证书的网站下的域名后申请即可，申请可能需要实名认证等一系列步骤，较为简单，此处省略。
+
+![image-20241216233641291](../img/image-20241216233641291.png)
+
+如果还是不能访问就点部署...
+
 ## 项目地址
 
-[大事件](http://www.webzank.site/login)->域名访问（因为需要备案暂时访问不了）
+[大事件](https://www.webzank.site)->域名访问
 
-[大事件](http://118.89.73.221/)->公网ip访问
+[大事件](http://47.243.94.84)->公网ip访问
