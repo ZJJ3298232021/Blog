@@ -25,19 +25,19 @@ $ npm install -g hexo-cli
 ```
 
 ![输入后](../img/A.png)
- 
+
 然后可以进行下一步：**建站**。
 
 # 建站 
 
 安装完Hxo之后，执行以下命令即可生成所需要的文件。
- 
+
 ```bash
 $ hexo init <folder> 
 $ cd <folder>
 $ npm install
 ```
-  
+
 其中<folder>中folder用你给你博客文件夹取的名字替换。
 
 完成后显示如下信息：
@@ -120,4 +120,70 @@ $ hexo s
 输入完后，你需要在域名解析中添加cname记录，将记录值填写为他给你的Value，name为你的域名的前半部分输入完后，你需要在域名解析中添加CNAME记录，将记录值填写为他给你的Value，name为你的域名的前半部分（例如，如果你的域名是"[www.example.com](www.example.com)"，那么填写的值应为'www'）。
 
 # 第二种部署方式(服务器部署+定时更新)
-暂定
+以安装了宝塔面板的服务器为例，首先进入宝塔面板点击文件，将网站文件夹上床到`www/wwwroot/`目录下，这里建议传输的时候不要传`node modules`（主要是因为文件太多宝塔也上传不了），传完后重新
+
+```bash
+npm install
+```
+
+就行，因为hexo是通过
+
+```bash
+hexo generate
+```
+
+生成静态文件到`public`下，所以我们直接在宝塔面板选择**网站**->**HTML项目**，如何填写自己的域名，选择`public`位置就行
+
+![](../img/image-20241218005813444.png)
+至于SSL证书在[部署SpringBoot+Vue的网站 - Zank的博客](https://blog.webzank.site/20241217/note/)一文有提到，这里不做阐述，域名添加使用A记录，指向服务器地址，这样就能通过域名访问我们的博客了。
+
+### 定时更新
+
+现在虽然网站已经能够访问了，但是还不够，因为这样部署的网站不能更新博客中的内容，这时候我们就能想到`linux`的`crontab`来开启定时任务，这里宝塔已经提供好了，先创建项目本地仓库，并添加远程仓库，然后再宝塔面板点击`计划任务`->`添加任务`
+
+![image-20241218010729490](../img/image-20241218010729490.png)
+
+最主要的是填写好脚本内容：
+
+```bash
+#!/bin/bash
+
+# 设置Node.js环境
+export PATH=/www/server/nodejs/v18.19.1/bin:$PATH
+# 或者使用nvm的情况
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# 设置hexo命令路径（使用which hexo查看路径）
+HEXO_PATH=/www/server/nodejs/v18.19.1/bin/hexo  # 根据实际路径修改
+
+# 进入博客目录
+cd /www/wwwroot/blog
+
+#获取仓库更新
+# 保存当前工作区的修改（如果有）
+git stash
+
+# 拉取最新代码并强制覆盖本地文件
+git fetch --all
+git reset --hard origin/master  # 如果是main分支就用origin/main
+git pull origin master
+
+# 恢复之前保存的修改（如果需要）
+# git stash pop
+
+# 更新子模块（如果有）
+git submodule update --init --recursive
+
+#更新依赖
+npm i
+
+# 执行hexo命令
+$HEXO_PATH clean
+$HEXO_PATH g
+
+chown -R www:www /www/wwwroot/blog/public
+chmod -R 755 /www/wwwroot/blog/public
+```
+
+完成后只需要在你的`windows`电脑上将更新的博客文章推送到远程仓库，服务器就会定时拉取更新然后重新生成静态页面，这样就实现了定时更新。
